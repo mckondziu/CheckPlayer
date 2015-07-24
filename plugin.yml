@@ -1,0 +1,10 @@
+name: CheckPlayer
+version: 0.3
+main: pl.minecraftkondziu.checkplayer
+author: filippop1 & minecraftkondziu
+description: 'Sprawdzanie graczy'
+
+commands:
+    check:
+        description: 'Sprawdz gracza za pomoca pluginu CheckPlayer. Teleportuje go do pokoju sprawdzajacego'
+        aliases: [sprawdz, spr, cp]
