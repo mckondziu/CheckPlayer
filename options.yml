@@ -1,13 +1,18 @@
 # zmienne: {PLAYER}
 ogloszenie-o-sprawdzaniu-gracza: '&7{PLAYER}&c jest podejrzany/a o cheaty!'
+
 # zmienne: {PLAYER} {ADMIN}
 ogloszenie-o-wylogowaniu-sie-podczas-sprawdzania: '&7{PLAYER}&c wylogowal/a sie podczas sprawdzania!'
+
 # zmienne: {PLAYER}
 wiadomosc-do-podejrzanego: '&7{PLAYER} &cjestes podejrzany/a o cheaty! Wejdz na nasz serwer TeamSpeak3 &7ts.siven.pl&c! Masz pytanie? Pisz na /helpop!'
 spam-wiadomosc-do-podejrzanego: 3
+
 # zmienne: {PLAYER} {ADMIN}
 ogloszenie-bana-za-cheaty: '&7{PLAYER} &czostal zbanowany/a za cheaty przez &7{ADMIN}&c!'
+
 # zmienne: {PLAYER} {ADMIN}
 wiadomosc-bana-za-cheaty-do-gracza: '&cZostales/a zbanowany/a za cheaty przez &7{ADMIN}.'
+
 # zmienne: {PLAYER}
 gracz-jest-czysty: '&7{PLAYER} &ajest czysty! :D'

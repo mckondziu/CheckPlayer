@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,7 +25,6 @@ public class checkplayer extends JavaPlugin {
         Config.registerConfig("options", "options.yml", this);
         Config.registerConfig("locations", "locations.yml", this);
         Config.loadAll();
-        this.loadSpawns();
         this.loadConfig();
         
         //metrics
@@ -50,27 +48,6 @@ public class checkplayer extends JavaPlugin {
     
     public static checkplayer getInst() {
         return instance;
-    }
-    
-    private void loadSpawns() {
-        try {
-            String world = Config.getConfig("locations").getString("check-room.world");
-            double x = Config.getConfig("locations").getDouble("check-room.x");
-            double y = Config.getConfig("locations").getDouble("check-room.y");
-            double z = Config.getConfig("locations").getDouble("check-room.z");
-            float yaw = Config.getConfig("locations").getInt("check-room.ya");
-            float pitch = Config.getConfig("locations").getInt("check-room.pi");
-            checkData.checkroom = new Location(this.getServer().getWorld(world), x, y, z, yaw, pitch);
-        } catch (Exception ex) {}
-        try {
-            String world = Config.getConfig("locations").getString("spawn.world");
-            double x = Config.getConfig("locations").getDouble("spawn.x");
-            double y = Config.getConfig("locations").getDouble("spawn.y");
-            double z = Config.getConfig("locations").getDouble("spawn.z");
-            float yaw = Config.getConfig("locations").getInt("spawn.ya");
-            float pitch = Config.getConfig("locations").getInt("spawn.pi");
-            checkData.spawn = new Location(this.getServer().getWorld(world), x, y, z, yaw, pitch);
-        } catch (Exception ex) {}
     }
     
     private void loadConfig() {

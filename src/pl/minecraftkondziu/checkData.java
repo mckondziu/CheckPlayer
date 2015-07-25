@@ -9,9 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 public class checkData {
-		
-		public static Location checkroom;
-	    public static Location spawn;
+	
 	    public static Location getLocationFromString(String locationInString){
 	        String[] split = locationInString.split("/");
 	 

@@ -19,6 +19,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 
 public class listeners implements Listener {
+	
+	double ded = 0;
 
 	@EventHandler(priority = EventPriority.MONITOR)
     public void onLeftClickOnPlayer(EntityDamageByEntityEvent e) {
@@ -39,13 +41,16 @@ public class listeners implements Listener {
                     e.setCancelled(true);
                     if (!checkCommands.sprawdzany.containsKey(clicked.getName())) {
                     	Location loc = clicked.getLocation();
+                        Location loca = p.getLocation();
                         Config.getConfig("locations").set("gracz."+clicked.getName(), checkData.locationToString(loc));
+                        Config.getConfig("locations").set("gracz."+p.getName(), checkData.locationToString(loca));
                         Config.saveAll();
                         try {
-                        	clicked.teleport(checkData.checkroom);
-                            p.teleport(checkData.checkroom);
+                        	Location checkroom = checkData.getLocationFromString(Config.getConfig("locations").getString("check-room"));
+                        	clicked.teleport(checkroom);
+                            p.teleport(checkroom);
                         } catch (Exception ex) {
-                            p.sendMessage(ChatColor.RED + "Spawn nie jest ustawiony! Aby ustawic wpisz /check setspawn checkroom");
+                            p.sendMessage(ChatColor.RED + "Spawn nie jest ustawiony! Aby ustawic wpisz /check setspawn");
                             return;
                         }
                         im.setDisplayName(ChatColor.RED + "LPM = ban, PPM = czysty/a na gracza " + clicked.getName());
@@ -63,10 +68,17 @@ public class listeners implements Listener {
                         String kickmessage = checkData.colorCodes(checkCommands.translate(checkData.banforcheatstoplayer, p.getName(), clicked.getName()));
                         checkCommands.sprawdzany.remove(clicked.getName());
                         Config.getConfig("bans").set(clicked.getName(), kickmessage);
-                        clicked.kickPlayer(kickmessage);
-                        Config.saveAll();
-                        Config.getConfig("locations").set("gracz." + clicked.getName(), null);
-                        Config.saveAll();
+                        clicked.setHealth(ded);
+                		clicked.kickPlayer(kickmessage);
+                		if(!(Config.getConfig("locations").getString("gracz."+p.getName()) != null)) {
+                			Config.getConfig("locations").set("gracz." + clicked.getName(), null);
+                		}else{
+                			Location loca = checkData.getLocationFromString(Config.getConfig("locations").getString("gracz."+p.getName()));
+                        	p.teleport(loca);
+                			Config.getConfig("locations").set("gracz." + p.getName(), null);
+                			Config.getConfig("locations").set("gracz." + clicked.getName(), null);
+                		}
+        	            Config.saveAll();
                         im.setDisplayName(ChatColor.RED + "Kliknij lewym, aby sprawdzic gracza!");
                         is.setItemMeta(im);
                     }    
@@ -90,15 +102,13 @@ public class listeners implements Listener {
         is.setItemMeta(im);
         checkCommands.sprawdzany.remove(target.getName());
         Bukkit.broadcastMessage(checkData.colorCodes(checkData.clear).replace("{PLAYER}", target.getName()));
-        try {
-        	Location loc = checkData.getLocationFromString(Config.getConfig("locations").getString("gracz."+target.getName()));
-            target.teleport(loc);
-            Config.getConfig("locations").set("gracz." + target.getName(), null);
-            Config.saveAll();
-            p.teleport(checkData.spawn);
-        } catch(Exception ex) {
-            p.sendMessage(ChatColor.RED + "Spawn nie jest ustawiony! Aby ustawic wpisz /check setspawn spawn");
-        }
+        Location loc = checkData.getLocationFromString(Config.getConfig("locations").getString("gracz."+target.getName()));
+		Location loca = checkData.getLocationFromString(Config.getConfig("locations").getString("gracz."+p.getName()));
+        target.teleport(loc);
+        p.teleport(loca);
+        Config.getConfig("locations").set("gracz." + target.getName(), null);
+        Config.getConfig("locations").set("gracz." + p.getName(), null);
+        Config.saveAll();
     }
     
     @EventHandler(priority=EventPriority.LOWEST)
@@ -123,13 +133,12 @@ public class listeners implements Listener {
     public void onPlayerLogout(PlayerQuitEvent e) {
         Player p = e.getPlayer();
         if (checkCommands.sprawdzany.containsKey(p.getName())) {
+        	p.setHealth(ded);
             String message = this.translate(checkData.banforcheatstoplayer, p.getName());
             Config.getConfig("bans").set(p.getName(), message);
-            Config.saveAll();
             Config.getConfig("locations").set("gracz." + p.getName(), null);
             Config.saveAll();
             String bcast = checkData.colorCodes(this.translate(checkData.broadcastlogoutplayer, p.getName()));
-            
             checkCommands.sprawdzany.remove(p.getName());
             Bukkit.broadcastMessage(bcast);
         }
